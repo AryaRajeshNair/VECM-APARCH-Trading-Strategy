@@ -1,32 +1,19 @@
 # VECM–APARCH Trading Strategy (with Trend Filter)
 
-A research-style trading prototype that combines **VECM** (for multivariate mean dynamics / cointegration structure) and **APARCH** (for volatility dynamics), with a simple **trend filter** for position management.
+This project implements a hybrid trading strategy combining Vector Error Correction Model for multivariate cointegration analysis with APARCH volatility modeling. The strategy incorporates a trend filter to optimize performance during bull markets.
 
+**Strategy Overview:**
 
-## Project Objective
+Entry Signal: Buy when VECM-APARCH hybrid forecast > current price
+Exit Logic: Sell when forecast < price, but modified by market regime:
+In downtrends: Exit immediately
+In uptrends: Hold through small declines, exit only on elevated volatility
+In ranging markets: Exit on sell signals
+Assets: Multi-asset class correlation (Oil, Equity Futures, Currencies, Metals, Volatility)
+Target: SPY (S&P 500 ETF)
 
-Build and evaluate a hybrid, walk-forward strategy that forecasts SPY direction using signals from a multi-asset feature set:
-- Crude Oil (`CL=F`)
-- Dow Futures (`YM=F`)
-- Nasdaq Futures (`NQ=F`)
-- Dollar Index (`DX-Y.NYB`)
-- Gold (`GC=F`)
-- Natural Gas (`NG=F`)
-- VIX (`^VIX`)
-- Target: `SPY`
-
-## Method Summary
-
-1. Download daily market data with `yfinance`
-2. Split into train/test
-3. Fit VECM on training history
-4. Fit APARCH on target residual dynamics
-5. Generate hybrid forecast in walk-forward loop
-6. Apply trend-aware trading logic:
-   - Buy if forecast > price
-   - Sell if forecast < price, with trend/volatility conditions
-7. Compare against Buy & Hold benchmark
-
+## Performance Summary
+This strategy showed strong out-of-sample performance in our test window, delivering higher cumulative and annualized returns than a SPY buy-and-hold benchmark, with a Sharpe ratio around 1 in the sample run. Overall, the VECM–APARCH + trend filter approach appears promising for capturing directional moves while managing exits across market regimes.
 
 ## Current Backtest Assumptions
 
